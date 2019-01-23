@@ -1,4 +1,5 @@
 const Twit = require('twit'),
+  tumblr = require('tumblr.js'),
   scryfall = require('scryfall-sdk'),
   https = require('https');
 
@@ -9,6 +10,13 @@ const T = new Twit({
   consumer_secret: process.env.BOT_CONSUMER_SECRET,
   access_token: process.env.BOT_ACCESS_TOKEN,
   access_token_secret: process.env.BOT_ACCESS_TOKEN_SECRET
+});
+
+const Tumbs = tumblr.createClient({
+  consumer_key: process.env.TUMBLR_CONSUMER_KEY,
+  consumer_secret: process.env.TUMBLR_CONSUMER_SECRET,
+  token: process.env.TUMBLR_TOKEN,
+  token_secret: process.env.TUMBLR_TOKEN_SECRET
 });
 
 function postRandomCard() {
@@ -32,6 +40,14 @@ function postRandomCard() {
         console.log('Converted!');
         console.log('Uploading an image...');
 
+        Tumbs.createPhotoPost('mtg-cards-hourly.tumblr.com', {
+          data64: base64,
+          caption: `<h1>${card.name}</h1><i>Art By: ${card.artist}</i>`,
+          tags: 'mtg, magic the gathering, tcg'
+        }, (res) => {
+          console.log('Posted On Tumblr')
+        });
+
         T.post('media/upload', {
           media_data: base64
         }, function (err, data) {
@@ -44,7 +60,7 @@ function postRandomCard() {
 
             T.post('statuses/update', {
                 media_ids: new Array(data.media_id_string),
-                status: card.name
+                status: `${card.name} #mtg`
               },
               function (err) {
                 if (err) {
