@@ -54,7 +54,7 @@ function postRandomCard() {
         Tumbs.createPhotoPost('mtg-cards-hourly.tumblr.com', {
           data64: base64,
           caption: caption,
-          tags: `mtg, magic the gathering, tcg, ${card.artist.toLowerCase()}`
+          tags: `mtg, magic the gathering, tcg, ${card.artist.toLowerCase()}, ${card.name.toLowerCase()}`
         }, (res) => {
           console.log('Posted On Tumblr')
         });
