@@ -64,10 +64,4 @@ function postRandomCard() {
   }).catch();
 };
 
-function callEveryHour() {
-  setInterval(postRandomCard, 1000 * 60 * 60);
-}
-
 postRandomCard();
-
-callEveryHour();
